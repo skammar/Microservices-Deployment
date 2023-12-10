@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  microservice1:
+    build:
+      context: ./microservice1
+    ports:
+      - "3001:3000"
+
+  microservice2:
+    build:
+      context: ./microservice2
+    ports:
+      - "3002:3000"

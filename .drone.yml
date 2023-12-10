@@ -1,0 +1,36 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  - name: build_microservice1
+    image: docker
+    commands:
+      - docker build -t your-docker-registry/microservice1:${DRONE_COMMIT_SHA} ./microservice1
+      - docker push your-docker-registry/microservice1:${DRONE_COMMIT_SHA}
+
+  - name: deploy_microservice1
+    image: plugins/helm
+    settings:
+      chart: charts/microservice1
+      repo: your-helm-repo
+      registry:
+        server: https://your-docker-registry
+        username: $$DOCKER_USERNAME
+        password: $$DOCKER_PASSWORD
+
+  - name: build_microservice2
+    image: docker
+    commands:
+      - docker build -t your-docker-registry/microservice2:${DRONE_COMMIT_SHA} ./microservice2
+      - docker push your-docker-registry/microservice2:${DRONE_COMMIT_SHA}
+
+  - name: deploy_microservice2
+    image: plugins/helm
+    settings:
+      chart: charts/microservice2
+      repo: your-helm-repo
+      registry:
+        server: https://your-docker-registry
+        username: $$DOCKER_USERNAME
+        password: $$DOCKER_PASSWORD
