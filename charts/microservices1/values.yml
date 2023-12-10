@@ -1,0 +1,4 @@
+replicaCount: 1
+image:
+  repository: your-docker-registry/microservice1
+  tag: latest
